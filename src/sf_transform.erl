@@ -9,11 +9,16 @@
 parse_transform(AST, Options) ->
     PrefixFilename = proplists:get_value(sf_prefix, Options, cwd),
     NthTail = proplists:get_value(sf_nth_tail, Options, 0),
+    Module = lists:concat([parse_trans:get_module(AST), ".erl"]),
     lists:map(
-        fun({attribute, Line, file, {Filename, _Line}}) ->
-            NewFilename = rename_filename(PrefixFilename, Filename, NthTail),
-            {attribute, Line, file, {NewFilename, Line}};
-        (Form) -> Form
+        fun({attribute, Line, file, {Filename, _Line}} = Form) ->
+            case {filename:pathtype(Filename), filename:basename(Filename)} of
+                {absolute, Module} ->
+                    NewFilename = rename_filename(PrefixFilename, Filename, NthTail),
+                    {attribute, Line, file, {NewFilename, Line}};
+                _ -> Form
+            end;
+            (Form) -> Form
         end, AST).
 
 %%====================================================================
