@@ -1,9 +1,35 @@
 sf_transform
 =====
 
+[中文说明](README_zh.md)
+
+## 2022.07.07 update
+
+Thanks @haoxian for remind，this lib `sf_transform` now is outdate.
+
+The new solution is better, only add `deterministic` to `erl_opts` in `rebar.config` file:
+
+```erlang
+{erl_opts, [
+  deterministic
+]}.
+```
+
+or setting by env：
+
+```shell
+ERL_COMPILER_OPTIONS="[deterministic]" rebar3 compile
+```
+
+The description for `deterministic` in [erlang docs](https://www.erlang.org/doc/man/compile.html)：
+
+> Omit the `options` and `source` tuples in the list returned by `Module:module_info(compile)`, and reduce the paths in stack traces to the module name alone. This option will make it easier to achieve reproducible builds.
+
+## Introduction
+
 If you use `rebar3` to build your code and you **hate** the error log's filename is very long and also not clear,like this:
 
-``` erlang
+```erlang
 {file,"/home/xxx/work/erlang/test/tsf/src/tsf_sup.erl"}
 ```
 
@@ -32,10 +58,7 @@ in your shell:
                                                   [{file,"proc_lib.erl"},
                                                    {line,247}]}]},
                                                {tsf_app,start,[normal,[]]}}
-
 ```
-
-
 
 ## Usage
 
@@ -87,7 +110,3 @@ Then your world become clear and better:
                                                    {line,247}]}]},
                                                {tsf_app,start,[normal,[]]}}
 ```
-
-## Issue
-
-Maybe your had other better solution, tell me, thank you.

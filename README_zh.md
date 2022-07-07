@@ -1,9 +1,33 @@
 sf_transform 使用指南
 =====
 
+## 2022.07.07 更新
+
+非常感谢 @haoxian 的提醒，`sf_transform` 的解决方案终于可以落幕了
+
+有了新的原生解决方案, 仅需要在 `rebar.config` 的 `erl_opts` 配置项加入 `deterministic` 即可：
+
+```erlang
+{erl_opts, [
+  deterministic
+]}.
+```
+
+亦可以通过环境变量来配置：
+
+```shell
+ERL_COMPILER_OPTIONS="[deterministic]" rebar3 compile
+```
+
+[官方文档](https://www.erlang.org/doc/man/compile.html) 中 `deterministic` 的解析如下：
+
+> Omit the `options` and `source` tuples in the list returned by `Module:module_info(compile)`, and reduce the paths in stack traces to the module name alone. This option will make it easier to achieve reproducible builds.
+
+## 前言
+
 如果你正在使用`rebar3`工具来工具你的项目和代码,有可能会很讨厌在`shell`窗口中的报错部分的文件名,像这样:
 
-``` erlang
+```erlang
 {file,"/home/xxx/work/erlang/test/tsf/src/tsf_sup.erl"}
 ```
 
@@ -32,7 +56,6 @@ sf_transform 使用指南
                                                   [{file,"proc_lib.erl"},
                                                    {line,247}]}]},
                                                {tsf_app,start,[normal,[]]}}
-
 ```
 
 是的,**报错的文件名真的是太长了**,长到怀疑人生
@@ -89,7 +112,3 @@ sf_transform 使用指南
                                                    {line,247}]}]},
                                                {tsf_app,start,[normal,[]]}}
 ```
-
-## 问题
-
-可能你有更好的解决方案,请联系我,谢谢.
